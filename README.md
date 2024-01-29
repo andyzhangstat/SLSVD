@@ -1,6 +1,9 @@
 # slsvd
 
-Sparse Logistic Singular Value Decomposition for Binary Matrix Data
+Sparse Logistic Singular Value Decomposition (SLSVD) for Binary Matrix Data!
+
+<!-- [![Documentation Status](https://readthedocs.org/projects/lr-cd/badge/?version=latest)](https://lr-cd.readthedocs.io/en/latest/?badge=latest) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![version](https://img.shields.io/github/v/release/UBC-MDS/lr_cd) ![release](https://img.shields.io/github/release-date/UBC-MDS/lr_cd) -->
+
 
 ## Installation
 
@@ -10,7 +13,14 @@ $ pip install slsvd
 
 ## Usage
 
-- TODO
+Use this package to find readthedocs.org
+
+
+```python
+>>> import numpy as np
+
+```
+
 
 ## Contributing
 
