@@ -1,6 +1,6 @@
 # slsvd
 
-A package for doing great things!
+Sparse Logistic Singular Value Decomposition for Binary Matrix Data
 
 ## Installation
 
