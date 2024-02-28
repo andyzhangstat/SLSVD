@@ -15,13 +15,13 @@ Sparse Logistic Singular Value Decomposition (SLSVD) for Binary Matrix Data
 
 ## Project Summary
 
-We implement linear regression using the coordinate descent (CD) algorithm in this Python package. For additional details about the [coordinate descent (CD) algorithm](https://en.wikipedia.org/wiki/Coordinate_descent), please refer to the link.
+We implement sparse logistic SVD (SLSVD) using the Majorization-Minimization (MM) algorithms in this Python package. 
 
-Our package consists of three major components:
+Our package consists of two major components:
 
 1. Simulated data generation
-2. Coordinate descent algorithm
-3. Visualization of data and the fitted linear regression 
+2. sparse logistic SVD
+
 
 ## Functions
 
@@ -29,7 +29,6 @@ There are three major functions in this package:
 
 - `generate_data_lr(n, n_features, theta, noise=0.2, random_seed=123)`: this function generates many random data points based on the theta coefficients, which will later be used for model fitting.
 - `coordinate_descent(X, y, ϵ=1e-6, max_iterations=1000)`: this function performs coordinate descent to minimize the mean squared error of linear regression and therefore outputs the optimized intercept and coefficients vector.
-- `plot_lr(X, y, intercept, coef)`: this function returns a scatter plot of the observed data points overlayed with a regression with optimized intercept and coefficients vector.
 
 ## Common Parameters
 
@@ -117,7 +116,7 @@ Use this package to find the optimized intercept and coefficients vector of line
 Example usage:
 
 ```python
->>> from lr_cd.lr_data_generation import generate_data_lr
+>>> from slsvd.data_generation import generate_data
 >>> import numpy as np
 >>> theta = np.array([4, 3])
 >>> X, y = generate_data_lr(n=10, n_features=1, theta=theta)
@@ -162,8 +161,8 @@ Publishing on [TestPyPi](https://test.pypi.org/project/lr-cd/) and [PyPi](https:
 
 ## Contributors
 
-[Andy Zhang](https://github.com/andyzhangstat) for algorithm, [Sam Fo](https://github.com/fohy24) for data generation, and
-[Jing Wen](https://github.com/Jing-19) for visualization.
+[Andy Zhang](https://github.com/andyzhangstat) 
+
 
 ## Contributing
 
