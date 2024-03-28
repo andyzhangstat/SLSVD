@@ -57,4 +57,4 @@ def generate_data(n, d, rank, random_seed=123):
 
     bin_mat = np.random.binomial(1, inverse_logit_mat)
 
-    return bin_mat
+    return bin_mat, loadings, scores, diagonal
