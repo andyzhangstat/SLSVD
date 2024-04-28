@@ -46,11 +46,11 @@ There are three major functions in this package:
 
 ## Python Ecosystem Context
 
-**lr_cd** establishes itself as a valuable enhancement to the Python ecosystem. The `LinearRegression` in the Python package `scikit-learn` has similar functionality, but our implementation uses a different algorithm, which we believe is superior. [`sklearn.linear_model.LinearRegression`](https://scikit-learn.org/stable/modules/linear_model.html#ordinary-least-squares) contains a few optimization functions: `scipy.linalg.lstsq`, `scipy.sparse.linalg.lsqr`, and `scipy.optimize.nnls`, which rely on the singular value decomposition of feature matrix `X`.
+**SLSVD** establishes itself as a valuable enhancement to the Python ecosystem. There is no function in the Python package `scikit-learn` has similar functionality,  our implementation uses Majorization-Minimization algorithm.
 
-- **Beginner-Friendly** : `lr_cd` is easy to use for beginners in Python and statistics. The well-written functions allow users to play with various simulated data and generate beautiful plots with little effort.
+- **Beginner-Friendly** : `SLSVD` is easy to use for beginners in Python and statistics. The well-written functions allow users to play with various simulated data and generate beautiful plots with little effort.
 
-- **Reliable-Alternative** : The coordinate descent algorithm is known for fast convergence in various convex optimization problems, making this Python package a reliable alternative to existed packages. Current package can be easily extended to a list of statistical models such as Ridge Regression and Lasso Regression.
+- **Reliable-Alternative** : The Majorization-Minimization algorithm is known for convergence in various optimization problems, making this Python package a reliable alternative to existed packages. 
 
 
 
@@ -67,8 +67,8 @@ Make sure Miniconda or Anaconda is installed on your system
 #### Step 1: Clone the Repository
 
 ```bash
-git clone git@github.com:UBC-MDS/lr_cd.git
-cd lr_cd  # Navigate to the cloned repository directory
+git clone git@github.com:andyzhangstat/SLSVD.git
+cd SLSVD  # Navigate to the cloned repository directory
 ```
 
 #### Step 2: Create and Activate the Conda Environment
@@ -76,16 +76,16 @@ cd lr_cd  # Navigate to the cloned repository directory
 ```bash
 # Method 1: create Conda Environment from the environment.yml file
 conda env create -f environment.yml  # Create Conda environment
-conda activate lr_cd  # Activate the Conda environment
+conda activate SLSVD  # Activate the Conda environment
 
 # Method 2: create Conda Environment 
-conda create --name lr_cd python=3.9 -y
-conda activate lr_cd
+conda create --name SLSVD python=3.9 -y
+conda activate SLSVD
 ```
 
 #### Step 3: Install the Package Using Poetry
 
-Ensure the Conda environment is activated (you should see (lr_cd) in the terminal prompt)
+Ensure the Conda environment is activated (you should see (SLSVD) in the terminal prompt)
 
 ```bash
 poetry install  # Install the package using Poetry
@@ -111,7 +111,7 @@ poetry run pytest --cov-branch --cov=lr_cd --cov-report html
 
 ## Usage
 
-Use this package to find the optimized intercept and coefficients vector of linear regression. In the following example, we generate a simulated data set with a feature matrix and response first. By the coordinate descent algorithm, we obtain the optimized intercept and coefficients. Finally, we visualize both the simulated data and fitted line in one figure.
+Use this package to find the optimized score and loading matrices of sparse logistic SVD. In the following example, we generate a simulated data set with defined size first. By the Majorization-Minimization algorithm, we obtain the optimized score and loading matrices. Finally, we visualize both the simulated data and fitted loadings in one figure.
 
 Example usage:
 
@@ -170,8 +170,8 @@ Interested in contributing? Check out the contributing guidelines. Please note t
 
 ## License
 
-`slsvd` was created by Andy Zhang. It is licensed under the terms of the MIT license.
+`SLSVD` was created by Andy Zhang. It is licensed under the terms of the MIT license.
 
 ## Credits
 
-`slsvd` was created with [`cookiecutter`](https://cookiecutter.readthedocs.io/en/latest/) and the `py-pkgs-cookiecutter` [template](https://github.com/py-pkgs/py-pkgs-cookiecutter).
+`SLSVD` was created with [`cookiecutter`](https://cookiecutter.readthedocs.io/en/latest/) and the `py-pkgs-cookiecutter` [template](https://github.com/py-pkgs/py-pkgs-cookiecutter).
