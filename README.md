@@ -27,8 +27,10 @@ Our package consists of two major components:
 
 There are three major functions in this package:
 
-- `generate_data_lr(n, n_features, theta, noise=0.2, random_seed=123)`: this function generates many random data points based on the theta coefficients, which will later be used for model fitting.
-- `coordinate_descent(X, y, ϵ=1e-6, max_iterations=1000)`: this function performs coordinate descent to minimize the mean squared error of linear regression and therefore outputs the optimized intercept and coefficients vector.
+- `generate_data(n, d, rank, random_seed=123)`: this function generates many random data points based on the theta coefficients, which will later be used for model fitting.
+- `sparse_logistic_pca(dat, lambda_val=0, k=2, quiet=True, max_iters=100, conv_crit=1e-5,
+                        randstart=False, procrustes=True, lasso=True, normalize=False,
+                        start_A=None, start_B=None, start_mu=None)`: this function performs Majorization-Minimization algorithm to minimize the mean squared error of linear regression and therefore outputs the optimized intercept and coefficients vector.
 
 ## Common Parameters
 
@@ -38,11 +40,11 @@ There are three major functions in this package:
 - `noise` (float): Standard deviation of a normal distribution added to the generated target y array as noise.
 - `random_seed` (integer): Random seed to ensure reproducibility.
 - `X` (ndarray): Feature data matrix, the independent variable.
-- `y` (ndarray): Response data vector, the dependent variable. Both `X` and `y` should have the same number of observations.
-- `ϵ` (float, optional): Stop the algorithm if the change in weights is smaller than the value (default is 1e-6).
+<!-- - `y` (ndarray): Response data vector, the dependent variable. Both `X` and `y` should have the same number of observations. -->
+<!-- - `ϵ` (float, optional): Stop the algorithm if the change in weights is smaller than the value (default is 1e-6). -->
 - `max_iterations` (integer, optional): Maximum number of iterations (default is 1000).
-- `intercept` (float): Optimized intercept. It will be used to calculate the estimated values using observed data `X`.
-- `coef` (ndarray): Optimized coefficient weights vector. It will be used to calculate the estimated values using observed data `X`.
+<!-- - `intercept` (float): Optimized intercept. It will be used to calculate the estimated values using observed data `X`. -->
+<!-- - `coef` (ndarray): Optimized coefficient weights vector. It will be used to calculate the estimated values using observed data `X`. -->
 
 ## Python Ecosystem Context
 
@@ -95,12 +97,12 @@ poetry install  # Install the package using Poetry
 
 ```bash
 # Check line coverage
-pytest --cov=lr_cd
+pytest --cov=SLSVD
 
 # Check branch coverage
-pytest --cov-branch --cov=lr_cd
+pytest --cov-branch --cov=SLSVD
 poetry run pytest --cov-branch --cov=src
-poetry run pytest --cov-branch --cov=lr_cd --cov-report html
+poetry run pytest --cov-branch --cov=SLSVD --cov-report html
 ```
 
 #### Troubleshooting
@@ -111,7 +113,7 @@ poetry run pytest --cov-branch --cov=lr_cd --cov-report html
 
 ## Usage
 
-Use this package to find the optimized score and loading matrices of sparse logistic SVD. In the following example, we generate a simulated data set with defined size first. By the Majorization-Minimization algorithm, we obtain the optimized score and loading matrices. Finally, we visualize both the simulated data and fitted loadings in one figure.
+Use this package to find the optimized score and loading matrices of sparse logistic Singular Value Decomposition. In the following example, we generate a simulated data set with defined size first. By the Majorization-Minimization algorithm, we obtain the optimized score and loading matrices. Finally, we visualize both the simulated data and fitted loadings in one figure.
 
 Example usage:
 
