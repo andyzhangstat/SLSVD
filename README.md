@@ -1,4 +1,4 @@
-# slsvd
+# SLSVD
 
 Sparse Logistic Singular Value Decomposition (SLSVD) for Binary Matrix Data
 
@@ -120,37 +120,16 @@ Example usage:
 ```python
 >>> from slsvd.data_generation import generate_data
 >>> import numpy as np
->>> theta = np.array([4, 3])
->>> X, y = generate_data_lr(n=10, n_features=1, theta=theta)
->>> print('Generated X:')
->>> print(X)
->>> print('Generated y:')
->>> print(y)
+# >>> theta = np.array([4, 3])
+# >>> X, y = generate_data_lr(n=10, n_features=1, theta=theta)
+# >>> print('Generated X:')
+# >>> print(X)
+# >>> print('Generated y:')
+# >>> print(y)
 ```
 
 ```
-Generated X:
-[[0.69646919]
- [0.28613933]
- [0.22685145]
- [0.55131477]
- [0.71946897]
- [0.42310646]
- [0.9807642 ]
- [0.68482974]
- [0.4809319 ]
- [0.39211752]]
-Generated y:
-[[6.34259481]
- [4.68506992]
- [4.54477713]
- [5.63500251]
- [6.45668483]
- [5.14153898]
- [6.8534962 ]
- [5.96761896]
- [5.88398172]
- [5.61370977]]
+
 ```
 
 
