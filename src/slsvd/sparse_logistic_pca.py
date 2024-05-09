@@ -23,8 +23,9 @@ def sparse_logistic_pca(dat, lambda_val=0, k=2, quiet=True, max_iters=100, conv_
         udv = svd((q - np.mean(q, axis=0)).T, full_matrices=False)
         # A = udv[0][:, :k]
         # B = udv[2][:k, :].T @ np.diag(udv[1][:k])
-        B = udv[0][:, :k]
         A = udv[2][:k, :].T @ np.diag(udv[1][:k])
+        B = udv[0][:, :k]
+        
 
     else:
         mu = np.random.randn(d)
