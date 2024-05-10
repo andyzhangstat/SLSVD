@@ -129,14 +129,16 @@ def sparse_logistic_pca_coord(dat, lambdas=np.logspace(-2, 2, num=10), k=2, quie
         # A = udv[0][:, :k]
         # B = udv[2][:k, :].T @ np.diag(udv[1][:k])
         B = udv[0][:, :k]
-        A = udv[2][:k, :].T @ np.diag(udv[1][:k])
+        #A = udv[2][:k, :].T @ np.diag(udv[1][:k])
+        A = udv[2][:k, :].T
     else:
         mu = np.random.randn(d)
         A = np.random.uniform(-1, 1, size=(n, k))
         B = np.random.uniform(-1, 1, size=(d, k))
 
     if start_B is not None:
-        B = start_B * np.sqrt(np.sum(start_A**2, axis=0))
+        #B = start_B * np.sqrt(np.sum(start_A**2, axis=0))
+        B = start_B / np.sqrt(np.sum(start_B**2, axis=0))
 
     if start_A is not None:
         A = start_A / np.sqrt(np.sum(start_A**2, axis=0))
@@ -193,22 +195,31 @@ def sparse_logistic_pca_coord(dat, lambdas=np.logspace(-2, 2, num=10), k=2, quie
             Bms[:, j] = B[:, m] / (1 if np.sum(B[:, m]**2) == 0 else np.sqrt(np.sum(B[:, m]**2)))
             Ams[:, j] = Xm @ Bms[:, j] / (1 if np.sum(Bms[:, j]**2) == 0 else np.sum(Bms[:, j]**2))
 
-            BICs[j, m] = -2 * loglike + np.log(n * d) * (np.sum(np.abs(B) >= 1e-10))
-            zeros_mat[j, m] = np.sum(np.abs(B[:, m]) < 1e-10)
+            #BICs[j, m] = -2 * loglike + np.log(n * d) * (np.sum(np.abs(B) >= 1e-10))
+            BICs[j, m] = -2 * loglike + np.log(n * d) * (np.count_nonzero(B[:, m]))
+
+
+            #zeros_mat[j, m] = np.sum(np.abs(B[:, m]) < 1e-10)
+            zeros_mat[j, m] = np.count_nonzero(B[:, m])
+
             iters[j, m] = i
 
         B[:, m] = Bms[:, np.argmin(BICs[:, m])]
         A[:, m] = Ams[:, np.argmin(BICs[:, m])]
 
     if normalize:
-        A = A / np.sqrt(np.sum(B**2, axis=0))
+        #A = A / np.sqrt(np.sum(B**2, axis=0))
+        A = A / np.sqrt(np.sum(A**2, axis=0))
         B = B / np.sqrt(np.sum(B**2, axis=0))
 
-    zeros = np.sum(np.abs(B) < 1e-10)
-    BIC = -2 * loglike + np.log(n * d) * (np.sum(np.abs(B) >= 1e-10))
+    #zeros = np.sum(np.abs(B) < 1e-10)
+    #BIC = -2 * loglike + np.log(n * d) * (np.sum(np.abs(B) >= 1e-10))
+    #BIC = -2 * loglike + np.log(n * d) * (np.sum(np.abs(B) >= 1e-10))
+
+
 
     # return {'mu': mu, 'A': A, 'B': B, 'zeros': zeros, 'zeros_mat': zeros_mat,
     #         'BICs': BICs, 'BIC': BIC, 'lambdas': lambdas, 'iters': iters}
 #loss_trace[:m + 1],
 
-    return mu, A, B, zeros, BIC, m,  lambda_val
+    return mu, A, B, zeros_mat, BICs, m,  lambda_val
