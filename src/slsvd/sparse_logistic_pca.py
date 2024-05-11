@@ -212,6 +212,8 @@ def sparse_logistic_pca_coord(dat, lambdas=np.logspace(-2, 2, num=10), k=2, quie
         A = A / np.sqrt(np.sum(A**2, axis=0))
         B = B / np.sqrt(np.sum(B**2, axis=0))
 
+
+
     #zeros = np.sum(np.abs(B) < 1e-10)
     #BIC = -2 * loglike + np.log(n * d) * (np.sum(np.abs(B) >= 1e-10))
     #BIC = -2 * loglike + np.log(n * d) * (np.sum(np.abs(B) >= 1e-10))
@@ -222,4 +224,5 @@ def sparse_logistic_pca_coord(dat, lambdas=np.logspace(-2, 2, num=10), k=2, quie
     #         'BICs': BICs, 'BIC': BIC, 'lambdas': lambdas, 'iters': iters}
 #loss_trace[:m + 1],
 
-    return mu, A, B, zeros_mat, BICs, m,  lambda_val
+    #return mu, A, B, zeros_mat, BICs, m,  lambda_val
+    return mu, A, B, zeros_mat, BICs
