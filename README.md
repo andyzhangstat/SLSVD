@@ -15,7 +15,7 @@ Sparse Logistic Singular Value Decomposition (SLSVD) for Binary Matrix Data
 
 ## Project Summary
 
-We implement the sparse logistic SVD (SLSVD) using the Majorization-Minimization (MM) and coordinate descent (CD) algorithms in this Python package. 
+We implement the Sparse Logistic Singular Value Decomposition (SLSVD) using the Majorization-Minimization (MM) and coordinate descent (CD) algorithms in this Python package. 
 
 Our package consists of three major components:
 
@@ -177,7 +177,7 @@ array([[1., 0.],
 ```
 
 
-<img src="https://github.com/andyzhangstat/SLSVD/blob/main/img/heatmap.png" height="100">
+<img src="https://github.com/andyzhangstat/SLSVD/blob/main/img/heatmap.png" height="200">
 
 
 
