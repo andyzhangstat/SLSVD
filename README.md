@@ -15,47 +15,50 @@ Sparse Logistic Singular Value Decomposition (SLSVD) for Binary Matrix Data
 
 ## Project Summary
 
-We implement sparse logistic SVD (SLSVD) using the Majorization-Minimization (MM) algorithms in this Python package. 
+We implement the sparse logistic SVD (SLSVD) using the Majorization-Minimization (MM) and coordinate descent (CD) algorithms in this Python package. 
 
-Our package consists of two major components:
+Our package consists of three major components:
 
-1. Simulated data generation
-2. sparse logistic SVD
+1. Simulated binary data generation
+2. Sparse logistic SVD 
+3. Metrics for evaluating estimations
 
 
 ## Functions
 
-There are three major functions in this package:
+There are two major functions in this package:
+`generate_data(n, d, rank, random_seed=123)`: This function generates random binary data points. It takes four parameters: `n` for the number of data points, `d` for the number of features, `rank` for the number of rank, and `random_seed` for ensuring reproducibility.
 
-- `generate_data(n, d, rank, random_seed=123)`: this function generates many random data points based on the theta coefficients, which will later be used for model fitting.
-- `sparse_logistic_pca(dat, lambda_val=0, k=2, quiet=True, max_iters=100, conv_crit=1e-5,
-                        randstart=False, procrustes=True, lasso=True, normalize=False,
-                        start_A=None, start_B=None, start_mu=None)`: this function performs Majorization-Minimization algorithm to minimize the mean squared error of linear regression and therefore outputs the optimized intercept and coefficients vector.
+`sparse_logistic_svd_coord(dat, lambdas=np.logspace(-2, 2, num=10), k=2, quiet=True,
+                           max_iters=100, conv_crit=1e-5, randstart=False,
+                           normalize=False, start_A=None, start_B=None, start_mu=None)`: This function performs Sparse Logistic Singular Value Decomposition (SLSVD) using Majorization-Minimization and Coordinate Descent algorithms. 
+
+
 
 ## Common Parameters
-
 - `n` (integer): Number of data points.
-- `n_features` (integer): Number of features to generate, excluding the intercept.
-- `theta` (ndarray): True scalar intercept and coefficient weights vector. The first element should always be the intercept.
-- `noise` (float): Standard deviation of a normal distribution added to the generated target y array as noise.
+- `n_features` (integer): Number of features.
 - `random_seed` (integer): Random seed to ensure reproducibility.
-- `X` (ndarray): Feature data matrix, the independent variable.
-<!-- - `y` (ndarray): Response data vector, the dependent variable. Both `X` and `y` should have the same number of observations. -->
-<!-- - `ϵ` (float, optional): Stop the algorithm if the change in weights is smaller than the value (default is 1e-6). -->
-- `max_iterations` (integer, optional): Maximum number of iterations (default is 1000).
-<!-- - `intercept` (float): Optimized intercept. It will be used to calculate the estimated values using observed data `X`. -->
-<!-- - `coef` (ndarray): Optimized coefficient weights vector. It will be used to calculate the estimated values using observed data `X`. -->
+- `X` (ndarray): Feature data matrix.
+- `dat`: Input data matrix.
+- `lambdas`: Array of regularization parameters.
+- `k`: Number of components.
+- `quiet`: Boolean to suppress iteration printouts.
+- `max_iters`: Maximum number of iterations.
+- `conv_crit`: Convergence criterion.
+- `randstart`: Boolean to use random initialization.
+- `normalize`: Boolean to normalize the components.
+- `start_A`: Initial value for matrix A.
+- `start_B`: Initial value for matrix B.
+- `start_mu`: Initial value for the mean vector.
+
+
+
+
 
 ## Python Ecosystem Context
 
-**SLSVD** establishes itself as a valuable enhancement to the Python ecosystem. There is no function in the Python package `scikit-learn` has similar functionality,  our implementation uses Majorization-Minimization algorithm.
-
-- **Beginner-Friendly** : `SLSVD` is easy to use for beginners in Python and statistics. The well-written functions allow users to play with various simulated data and generate beautiful plots with little effort.
-
-- **Reliable-Alternative** : The Majorization-Minimization algorithm is known for convergence in various optimization problems, making this Python package a reliable alternative to existed packages. 
-
-
-
+**SLSVD** establishes itself as a valuable enhancement to the Python ecosystem. There is no function in the Python package `scikit-learn` has similar functionality,  our implementation uses Majorization-Minimization and Coordinate Descent algorithms.
 
 
 
@@ -120,25 +123,105 @@ Example usage:
 ```python
 >>> from slsvd.data_generation import generate_data
 >>> import numpy as np
-# >>> theta = np.array([4, 3])
-# >>> X, y = generate_data_lr(n=10, n_features=1, theta=theta)
-# >>> print('Generated X:')
-# >>> print(X)
-# >>> print('Generated y:')
-# >>> print(y)
-```
+>>> import matplotlib.pyplot as plt
+>>> bin_mat, loadings, scores, diagonal=generate_data(n=200, d=100, rank=2, random_seed=123)
+
+# Check shapes
+>>> print("Binary Matrix Shape:", bin_mat.shape)
+>>> print("Loadings Shape:", loadings.shape)
+>>> print("Scores Shape:", scores.shape)
+
+# Calculate dot product of scores
+>>> scores_dot_product = np.dot(scores.T, scores)
+>>> print("Dot Product of Scores:\n", scores_dot_product)
+
+# Calculate dot product of loadings
+>>> loadings_dot_product = np.dot(loadings.T, loadings)
+>>> print("Dot Product of Loadings:\n", loadings_dot_product)
 
 ```
 
 ```
+Binary Matrix Shape: (200, 100)
+
+Loadings Shape: (100, 2)
+
+Scores Shape: (200, 2)
+
+Dot Product of Scores:
+array([[195.4146256 ,   2.67535881],
+       [  2.67535881, 200.14653178]])
+
+Dot Product of Loadings:
+array([[1., 0.],
+       [0., 1.]])
+```
+
+
+
+```python
+>>> plt.figure(figsize=(8, 12))
+>>> cmap = plt.cm.get_cmap('viridis', 2)
+
+>>> plt.imshow(bin_mat, cmap=cmap, interpolation='nearest')
+
+>>> cbar = plt.colorbar(ticks=[0.25, 0.75])
+>>> cbar.ax.set_yticklabels(['0', '1'])
+
+>>> plt.title('Heatmap of Binary Matrix')
+>>> plt.xlabel('Feature')
+>>> plt.ylabel('Sample')
+
+>>> plt.show()
+```
+
+
+<img src="https://github.com/andyzhangstat/SLSVD/tree/main/img/heatmap.png?raw=true" height="200">
+
+
+
+```python
+>>> from slsvd.slsvd import sparse_logistic_svd_coord
+>>> import numpy as np
+
+>>> # Perform Sparse Logistic SVD
+>>> mu, A, B, zeros, BICs = sparse_logistic_svd_coord(bin_mat, lambdas=np.logspace(-2, 1, num=10), k=2)
+
+>>> # Calculate mean of mu
+>>> print("Mean of mu:", np.mean(mu))
+
+>>> # Calculate dot product of A
+>>> print("Dot Product of A:\n", np.dot(A.T, A))
+
+>>> # Calculate dot product of B
+>>> print("Dot Product of B:\n", np.dot(B.T, B))
+
+```
+
+
+
+```
+"Mean of mu: 0.052624279581212116
+
+Dot Product of A:
+array([[7672.61634966,  277.23466856],
+       [ 277.23466856, 3986.24113586]])
+
+Dot Product of B:
+array([[1.        , 0.00111067],
+       [0.00111067, 1.        ]])
+
+```
+
 
 
 
 ## Documentations
 
+<!-- 
 Online documentation is available [readthedocs](https://lr-cd.readthedocs.io/en/latest/?badge=latest).
 
-Publishing on [TestPyPi](https://test.pypi.org/project/lr-cd/) and [PyPi](https://pypi.org/project/lr-cd/).
+Publishing on [TestPyPi](https://test.pypi.org/project/lr-cd/) and [PyPi](https://pypi.org/project/lr-cd/). -->
 
 ## Contributors
 
