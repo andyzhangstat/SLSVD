@@ -27,6 +27,7 @@ Our package consists of three major components:
 ## Functions
 
 There are two major functions in this package:
+
 `generate_data(n, d, rank, random_seed=123)`: This function generates random binary data points. It takes four parameters: `n` for the number of data points, `d` for the number of features, `rank` for the number of rank, and `random_seed` for ensuring reproducibility.
 
 `sparse_logistic_svd_coord(dat, lambdas=np.logspace(-2, 2, num=10), k=2, quiet=True,
@@ -116,7 +117,7 @@ poetry run pytest --cov-branch --cov=SLSVD --cov-report html
 
 ## Usage
 
-Use this package to find the optimized score and loading matrices of sparse logistic Singular Value Decomposition. In the following example, we generate a simulated data set with defined size first. By the Majorization-Minimization algorithm, we obtain the optimized score and loading matrices. Finally, we visualize both the simulated data and fitted loadings in one figure.
+Use this package to find the optimized score and loading matrices of sparse logistic Singular Value Decomposition. In the following example, we generate a simulated data set with defined size first. By the Majorization-Minimization and Coordinate Descent algorithms, we obtain the optimized score and loading matrices. Finally, we visualize both the simulated data and fitted loadings in one figure.
 
 Example usage:
 
@@ -176,7 +177,7 @@ array([[1., 0.],
 ```
 
 
-<img src="https://github.com/andyzhangstat/SLSVD/tree/main/img/heatmap.png?raw=true" height="200">
+<img src="https://github.com/andyzhangstat/SLSVD/blob/main/img/heatmap.png" height="100">
 
 
 
@@ -201,7 +202,7 @@ array([[1., 0.],
 
 
 ```
-"Mean of mu: 0.052624279581212116
+Mean of mu: 0.052624279581212116
 
 Dot Product of A:
 array([[7672.61634966,  277.23466856],
