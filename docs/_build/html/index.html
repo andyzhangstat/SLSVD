@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SLSVD &mdash; slsvd  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Sparse Logistic Singular Value Decomposition: User Guide" href="example.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            slsvd
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Sparse Logistic Singular Value Decomposition: User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">slsvd</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">SLSVD</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="slsvd">
+<h1>SLSVD<a class="headerlink" href="#slsvd" title="Link to this heading"></a></h1>
+<p>Sparse Logistic Singular Value Decomposition (SLSVD) for Binary Matrix Data</p>
+<p><img alt="CI/CD" src="https://github.com/UBC-MDS/lr_cd/actions/workflows/ci-cd.yml/badge.svg" />
+<a class="reference external" href="https://codecov.io/gh/UBC-MDS/lr_cd"><img alt="codecov" src="https://codecov.io/gh/UBC-MDS/lr_cd/branch/main/graph/badge.svg" /></a>
+<a class="reference external" href="https://lr-cd.readthedocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/lr-cd/badge/?version=latest" /></a>
+<a class="reference external" href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
+<img alt="version" src="https://img.shields.io/github/v/release/UBC-MDS/lr_cd" />
+<a class="reference external" href="https://www.python.org/downloads/release/python-390/"><img alt="Python 3.9.0" src="https://img.shields.io/badge/python-3.9.0-blue.svg" /></a>
+<img alt="release" src="https://img.shields.io/github/release-date/UBC-MDS/lr_cd" />
+<a class="reference external" href="https://www.repostatus.org/#active"><img alt="Project Status: Active – The project has reached a stable, usable state and is being actively developed." src="https://www.repostatus.org/badges/latest/active.svg" /></a></p>
+<section id="project-summary">
+<h2>Project Summary<a class="headerlink" href="#project-summary" title="Link to this heading"></a></h2>
+<p>We implement the Sparse Logistic Singular Value Decomposition (SLSVD) using the Majorization-Minimization (MM) and coordinate descent (CD) algorithms in this Python package.</p>
+<p>Our package consists of three major components:</p>
+<ol class="arabic simple">
+<li><p>Simulated binary data generation</p></li>
+<li><p>Sparse logistic SVD</p></li>
+<li><p>Metrics for evaluating estimations</p></li>
+</ol>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<p>There are two major functions in this package:</p>
+<p><code class="docutils literal notranslate"><span class="pre">generate_data(n,</span> <span class="pre">d,</span> <span class="pre">rank,</span> <span class="pre">random_seed=123)</span></code>: This function generates random binary data points. It takes four parameters: <code class="docutils literal notranslate"><span class="pre">n</span></code> for the number of data points, <code class="docutils literal notranslate"><span class="pre">d</span></code> for the number of features, <code class="docutils literal notranslate"><span class="pre">rank</span></code> for the number of rank, and <code class="docutils literal notranslate"><span class="pre">random_seed</span></code> for ensuring reproducibility.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sparse_logistic_svd_coord(dat,</span> <span class="pre">lambdas=np.logspace(-2,</span> <span class="pre">2,</span> <span class="pre">num=10),</span> <span class="pre">k=2,</span> <span class="pre">quiet=True,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">max_iters=100,</span> <span class="pre">conv_crit=1e-5,</span> <span class="pre">randstart=False,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">normalize=False,</span> <span class="pre">start_A=None,</span> <span class="pre">start_B=None,</span> <span class="pre">start_mu=None)</span></code>: This function performs Sparse Logistic Singular Value Decomposition (SLSVD) using Majorization-Minimization and Coordinate Descent algorithms.</p>
+</section>
+<section id="common-parameters">
+<h2>Common Parameters<a class="headerlink" href="#common-parameters" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code> (integer): Number of data points.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">d</span></code> (integer): Number of features.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rank</span></code>: Number of components.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">random_seed</span></code> (integer): Random seed to ensure reproducibility.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dat</span></code>: Input data matrix.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lambdas</span></code>: Array of regularization parameters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">k</span></code>: Number of components.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">quiet</span></code>: Boolean to suppress iteration printouts.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_iters</span></code>: Maximum number of iterations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">conv_crit</span></code>: Convergence criterion.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">randstart</span></code>: Boolean to use random initialization.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">normalize</span></code>: Boolean to normalize the components.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">start_A</span></code>: Initial value for matrix A.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">start_B</span></code>: Initial value for matrix B.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">start_mu</span></code>: Initial value for the mean vector.</p></li>
+</ul>
+</section>
+<section id="python-ecosystem-context">
+<h2>Python Ecosystem Context<a class="headerlink" href="#python-ecosystem-context" title="Link to this heading"></a></h2>
+<p><strong>SLSVD</strong> establishes itself as a valuable enhancement to the Python ecosystem. There is no function in the Python package <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> has similar functionality,  our implementation uses Majorization-Minimization and Coordinate Descent algorithms.</p>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h3>
+<p>Make sure Miniconda or Anaconda is installed on your system</p>
+<section id="step-1-clone-the-repository">
+<h4>Step 1: Clone the Repository<a class="headerlink" href="#step-1-clone-the-repository" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:andyzhangstat/SLSVD.git
+<span class="nb">cd</span><span class="w"> </span>SLSVD<span class="w">  </span><span class="c1"># Navigate to the cloned repository directory</span>
+</pre></div>
+</div>
+</section>
+<section id="step-2-create-and-activate-the-conda-environment">
+<h4>Step 2: Create and Activate the Conda Environment<a class="headerlink" href="#step-2-create-and-activate-the-conda-environment" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Method 1: create Conda Environment from the environment.yml file</span>
+conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>environment.yml<span class="w">  </span><span class="c1"># Create Conda environment</span>
+conda<span class="w"> </span>activate<span class="w"> </span>SLSVD<span class="w">  </span><span class="c1"># Activate the Conda environment</span>
+
+<span class="c1"># Method 2: create Conda Environment </span>
+conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>SLSVD<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9<span class="w"> </span>-y
+conda<span class="w"> </span>activate<span class="w"> </span>SLSVD
+</pre></div>
+</div>
+</section>
+<section id="step-3-install-the-package-using-poetry">
+<h4>Step 3: Install the Package Using Poetry<a class="headerlink" href="#step-3-install-the-package-using-poetry" title="Link to this heading"></a></h4>
+<p>Ensure the Conda environment is activated (you should see (SLSVD) in the terminal prompt)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install<span class="w">  </span><span class="c1"># Install the package using Poetry</span>
+</pre></div>
+</div>
+</section>
+<section id="step-4-get-the-coverage">
+<h4>Step 4: Get the coverage<a class="headerlink" href="#step-4-get-the-coverage" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check line coverage</span>
+pytest<span class="w"> </span>--cov<span class="o">=</span>SLSVD
+
+<span class="c1"># Check branch coverage</span>
+pytest<span class="w"> </span>--cov-branch<span class="w"> </span>--cov<span class="o">=</span>SLSVD
+poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>--cov-branch<span class="w"> </span>--cov<span class="o">=</span>src
+poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>--cov-branch<span class="w"> </span>--cov<span class="o">=</span>SLSVD<span class="w"> </span>--cov-report<span class="w"> </span>html
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h4>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h4>
+<ol class="arabic simple">
+<li><p>Environment Creation Issues: Ensure environment.yml is in the correct directory and you have the correct Conda version</p></li>
+<li><p>Poetry Installation Issues: Verify Poetry is correctly installed in the Conda environment and your pyproject.toml file is properly configured</p></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<p>Use this package to find the optimized score and loading matrices of sparse logistic Singular Value Decomposition. In the following example, we generate a simulated data set with defined size first. By the Majorization-Minimization and Coordinate Descent algorithms, we obtain the optimized score and loading matrices. Finally, we visualize both the simulated data and fitted loadings in one figure.</p>
+<p>Example usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">slsvd.data_generation</span> <span class="kn">import</span> <span class="n">generate_data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bin_mat</span><span class="p">,</span> <span class="n">loadings</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">diagonal</span><span class="o">=</span><span class="n">generate_data</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+
+<span class="go"># Check shapes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Binary Matrix Shape:&quot;</span><span class="p">,</span> <span class="n">bin_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loadings Shape:&quot;</span><span class="p">,</span> <span class="n">loadings</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Scores Shape:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="go"># Calculate dot product of scores</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scores_dot_product</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dot Product of Scores:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">scores_dot_product</span><span class="p">)</span>
+
+<span class="go"># Calculate dot product of loadings</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loadings_dot_product</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">loadings</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">loadings</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dot Product of Loadings:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">loadings_dot_product</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Binary</span> <span class="n">Matrix</span> <span class="n">Shape</span><span class="p">:</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="n">Loadings</span> <span class="n">Shape</span><span class="p">:</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">Scores</span> <span class="n">Shape</span><span class="p">:</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">Dot</span> <span class="n">Product</span> <span class="n">of</span> <span class="n">Scores</span><span class="p">:</span>
+<span class="n">array</span><span class="p">([[</span><span class="mf">195.4146256</span> <span class="p">,</span>   <span class="mf">2.67535881</span><span class="p">],</span>
+       <span class="p">[</span>  <span class="mf">2.67535881</span><span class="p">,</span> <span class="mf">200.14653178</span><span class="p">]])</span>
+
+<span class="n">Dot</span> <span class="n">Product</span> <span class="n">of</span> <span class="n">Loadings</span><span class="p">:</span>
+<span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">bin_mat</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Heatmap of Binary Matrix&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Feature&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Sample&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img src="https://github.com/andyzhangstat/SLSVD/blob/main/img/heatmap.png" width="1280" height="850">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">slsvd.slsvd</span> <span class="kn">import</span> <span class="n">sparse_logistic_svd_coord</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Perform Sparse Logistic SVD</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">BICs</span> <span class="o">=</span> <span class="n">sparse_logistic_svd_coord</span><span class="p">(</span><span class="n">bin_mat</span><span class="p">,</span> <span class="n">lambdas</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate mean of mu</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean of mu:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mu</span><span class="p">))</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate dot product of Scores</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dot Product of Scores:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">A</span><span class="p">))</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate dot product of Loadings</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dot Product of Loadings:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">B</span><span class="p">))</span>
+
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Mean</span> <span class="n">of</span> <span class="n">mu</span><span class="p">:</span> <span class="mf">0.052624279581212116</span>
+
+<span class="n">Dot</span> <span class="n">Product</span> <span class="n">of</span> <span class="n">Scores</span><span class="p">:</span>
+<span class="n">array</span><span class="p">([[</span><span class="mf">7672.61634966</span><span class="p">,</span>  <span class="mf">277.23466856</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">277.23466856</span><span class="p">,</span> <span class="mf">3986.24113586</span><span class="p">]])</span>
+
+<span class="n">Dot</span> <span class="n">Product</span> <span class="n">of</span> <span class="n">Loadings</span><span class="p">:</span>
+<span class="n">array</span><span class="p">([[</span><span class="mf">1.</span>        <span class="p">,</span> <span class="mf">0.00111067</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.00111067</span><span class="p">,</span> <span class="mf">1.</span>        <span class="p">]])</span>
+
+</pre></div>
+</div>
+</section>
+<section id="documentations">
+<h2>Documentations<a class="headerlink" href="#documentations" title="Link to this heading"></a></h2>
+<p>Online documentation is available <a class="reference external" href="https://slsvd.readthedocs.io/en/latest/?badge=latest">readthedocs</a>.</p>
+<p>Publishing on <a class="reference external" href="https://test.pypi.org/project/slsvd/">TestPyPi</a> and <a class="reference external" href="https://pypi.org/project/slsvd/">PyPi</a>.</p>
+</section>
+<section id="contributors">
+<h2>Contributors<a class="headerlink" href="#contributors" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://github.com/andyzhangstat">Andy Zhang</a></p>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h2>
+<p>Interested in contributing? Check out the contributing guidelines. Please note that this project is released with a Code of Conduct. By contributing to this project, you agree to abide by its terms.</p>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">SLSVD</span></code> was created by Andy Zhang. It is licensed under the terms of the MIT license.</p>
+</section>
+<section id="credits">
+<h2>Credits<a class="headerlink" href="#credits" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">SLSVD</span></code> was created with <a class="reference external" href="https://cookiecutter.readthedocs.io/en/latest/"><code class="docutils literal notranslate"><span class="pre">cookiecutter</span></code></a> and the <code class="docutils literal notranslate"><span class="pre">py-pkgs-cookiecutter</span></code> <a class="reference external" href="https://github.com/py-pkgs/py-pkgs-cookiecutter">template</a>.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="example.html" class="btn btn-neutral float-right" title="Sparse Logistic Singular Value Decomposition: User Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Andy Zhang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

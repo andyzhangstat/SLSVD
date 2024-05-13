@@ -1,0 +1,24 @@
+:py:mod:`slsvd`
+===============
+
+.. py:module:: slsvd
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   data_generation/index.rst
+   metrics/index.rst
+   slsvd/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: __version__
+
+   
+

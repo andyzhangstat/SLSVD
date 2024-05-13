@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>slsvd.slsvd &mdash; slsvd  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            slsvd
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../example.html">Sparse Logistic Singular Value Decomposition: User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">slsvd</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">slsvd.slsvd</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for slsvd.slsvd</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">svd</span>
+
+<div class="viewcode-block" id="inv_logit_mat">
+<a class="viewcode-back" href="../../autoapi/slsvd/slsvd/index.html#slsvd.slsvd.inv_logit_mat">[docs]</a>
+<span class="k">def</span> <span class="nf">inv_logit_mat</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">min_val</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Inverse logit transformation.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    x : ndarray</span>
+<span class="sd">        Input array.</span>
+<span class="sd">    min_val : float, optional</span>
+<span class="sd">        Minimum value for the output range.</span>
+<span class="sd">    max_val : float, optional</span>
+<span class="sd">        Maximum value for the output range.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        Inverse logit transformed array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">which_large</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">p</span><span class="p">[</span><span class="n">which_large</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span> <span class="o">+</span> <span class="n">min_val</span></div>
+
+
+<div class="viewcode-block" id="sparse_logistic_svd">
+<a class="viewcode-back" href="../../autoapi/slsvd/slsvd/index.html#slsvd.slsvd.sparse_logistic_svd">[docs]</a>
+<span class="k">def</span> <span class="nf">sparse_logistic_svd</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">lambda_val</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_iters</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">conv_crit</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span>
+                        <span class="n">randstart</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">procrustes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lasso</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">start_A</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_B</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_mu</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sparse Logistic PCA.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    dat : ndarray</span>
+<span class="sd">        Input data matrix.</span>
+<span class="sd">    lambda_val : float, optional</span>
+<span class="sd">        Regularization parameter.</span>
+<span class="sd">    k : int, optional</span>
+<span class="sd">        Number of components.</span>
+<span class="sd">    quiet : bool, optional</span>
+<span class="sd">        If True, suppresses iteration printouts.</span>
+<span class="sd">    max_iters : int, optional</span>
+<span class="sd">        Maximum number of iterations.</span>
+<span class="sd">    conv_crit : float, optional</span>
+<span class="sd">        Convergence criterion.</span>
+<span class="sd">    randstart : bool, optional</span>
+<span class="sd">        If True, uses random initialization.</span>
+<span class="sd">    procrustes : bool, optional</span>
+<span class="sd">        If True, uses procrustes transformation.</span>
+<span class="sd">    lasso : bool, optional</span>
+<span class="sd">        If True, applies lasso regularization.</span>
+<span class="sd">    normalize : bool, optional</span>
+<span class="sd">        If True, normalizes the components.</span>
+<span class="sd">    start_A : ndarray, optional</span>
+<span class="sd">        Initial value for matrix A.</span>
+<span class="sd">    start_B : ndarray, optional</span>
+<span class="sd">        Initial value for matrix B.</span>
+<span class="sd">    start_mu : ndarray, optional</span>
+<span class="sd">        Initial value for mean vector.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Tuple containing mu, A, B, zeros, BIC, m, lambda_val.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dat</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">q</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">q</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">n</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">dat</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">randstart</span><span class="p">:</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">udv</span> <span class="o">=</span> <span class="n">svd</span><span class="p">((</span><span class="n">q</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">full_matrices</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">udv</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span> <span class="p">:</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">udv</span><span class="p">[</span><span class="mi">2</span><span class="p">][:</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">udv</span><span class="p">[</span><span class="mi">1</span><span class="p">][:</span><span class="n">k</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">start_B</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">start_B</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">start_A</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">start_A</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">start_A</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">start_A</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">start_mu</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">start_mu</span>
+
+    <span class="n">loss_trace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">max_iters</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iters</span><span class="p">):</span>
+        <span class="n">last_mu</span> <span class="o">=</span> <span class="n">mu</span>
+        <span class="n">last_A</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">last_B</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">mu</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">inv_logit_mat</span><span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">theta</span><span class="p">))</span>
+        <span class="n">Xcross</span> <span class="o">=</span> <span class="n">X</span> <span class="o">-</span> <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Xcross</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">mu</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">inv_logit_mat</span><span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">theta</span><span class="p">))</span>
+        <span class="n">Xstar</span> <span class="o">=</span> <span class="n">X</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">mu</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">procrustes</span><span class="p">:</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">Xstar</span> <span class="o">@</span> <span class="n">B</span><span class="p">)</span>
+            <span class="n">A</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,:</span><span class="mi">2</span><span class="p">]</span> <span class="o">@</span> <span class="n">M</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">A</span> <span class="o">=</span> <span class="n">Xstar</span> <span class="o">@</span> <span class="n">B</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">B</span><span class="p">)</span>
+            <span class="n">A</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">mu</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">inv_logit_mat</span><span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">theta</span><span class="p">))</span>
+        <span class="n">Xstar</span> <span class="o">=</span> <span class="n">X</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">mu</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">lasso</span><span class="p">:</span>
+            <span class="n">B_lse</span> <span class="o">=</span> <span class="n">Xstar</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">A</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">B_lse</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">B_lse</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">lambda_val</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">C</span> <span class="o">=</span> <span class="n">Xstar</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">A</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">lambda_val</span><span class="p">)</span> <span class="o">*</span> <span class="n">C</span>
+
+        <span class="n">loglike</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">inv_logit_mat</span><span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">mu</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">))))[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">dat</span><span class="p">)])</span>
+        <span class="n">penalty</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">lambda_val</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">B</span><span class="p">))</span>
+        <span class="n">loss_trace</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">loglike</span> <span class="o">+</span> <span class="n">penalty</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">dat</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s2">&quot;  &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="o">-</span><span class="n">loglike</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="s2">&quot;   &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">penalty</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="s2">&quot;     &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="o">-</span><span class="n">loglike</span> <span class="o">+</span> <span class="n">penalty</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">loss_trace</span><span class="p">[</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">loss_trace</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">conv_crit</span><span class="p">:</span>
+                <span class="k">break</span>
+
+    <span class="k">if</span> <span class="n">loss_trace</span><span class="p">[</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">loss_trace</span><span class="p">[</span><span class="n">m</span><span class="p">]:</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">last_mu</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">last_A</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">last_B</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">loglike</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">inv_logit_mat</span><span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">mu</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">))))[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">dat</span><span class="p">)])</span>
+
+    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">A</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">B</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">B</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">B</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">)</span>
+    <span class="n">BIC</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">loglike</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">1e-10</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">mu</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">BIC</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">lambda_val</span></div>
+
+
+
+
+
+
+<div class="viewcode-block" id="sparse_logistic_svd_coord">
+<a class="viewcode-back" href="../../autoapi/slsvd/slsvd/index.html#slsvd.slsvd.sparse_logistic_svd_coord">[docs]</a>
+<span class="k">def</span> <span class="nf">sparse_logistic_svd_coord</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">lambdas</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">max_iters</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">conv_crit</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">randstart</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                               <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">start_A</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_B</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_mu</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sparse Logistic SVD with Coordinate Descent.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    dat : ndarray</span>
+<span class="sd">        Input data matrix.</span>
+<span class="sd">    lambdas : array_like, optional</span>
+<span class="sd">        Array of regularization parameters.</span>
+<span class="sd">    k : int, optional</span>
+<span class="sd">        Number of components.</span>
+<span class="sd">    quiet : bool, optional</span>
+<span class="sd">        If True, suppresses iteration printouts.</span>
+<span class="sd">    max_iters : int, optional</span>
+<span class="sd">        Maximum number of iterations.</span>
+<span class="sd">    conv_crit : float, optional</span>
+<span class="sd">        Convergence criterion.</span>
+<span class="sd">    randstart : bool, optional</span>
+<span class="sd">        If True, uses random initialization.</span>
+<span class="sd">    normalize : bool, optional</span>
+<span class="sd">        If True, normalizes the components.</span>
+<span class="sd">    start_A : ndarray, optional</span>
+<span class="sd">        Initial value for matrix A.</span>
+<span class="sd">    start_B : ndarray, optional</span>
+<span class="sd">        Initial value for matrix B.</span>
+<span class="sd">    start_mu : ndarray, optional</span>
+<span class="sd">        Initial value for mean vector.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Tuple containing mu, A, B, zeros_mat, BICs.</span>
+<span class="sd">        - mu: The mean vector.</span>
+<span class="sd">        - A: The matrix A.</span>
+<span class="sd">        - B: The matrix B.</span>
+<span class="sd">        - zeros_mat: Matrix indicating the number of zeros in each component.</span>
+<span class="sd">        - BICs: Matrix containing the Bayesian Information Criterion for each component.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+    <span class="n">q</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dat</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">q</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">q</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">n</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">dat</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">randstart</span><span class="p">:</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">udv</span> <span class="o">=</span> <span class="n">svd</span><span class="p">((</span><span class="n">q</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">full_matrices</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># A = udv[0][:, :k]</span>
+        <span class="c1"># B = udv[2][:k, :].T @ np.diag(udv[1][:k])</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">udv</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span> <span class="p">:</span><span class="n">k</span><span class="p">]</span>
+        <span class="c1">#A = udv[2][:k, :].T @ np.diag(udv[1][:k])</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">udv</span><span class="p">[</span><span class="mi">2</span><span class="p">][:</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">start_B</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1">#B = start_B * np.sqrt(np.sum(start_A**2, axis=0))</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">start_B</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">start_B</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">start_A</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">start_A</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">start_A</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">start_mu</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">start_mu</span>
+
+    <span class="n">BICs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">lambdas</span><span class="p">),</span> <span class="n">k</span><span class="p">))</span>
+    <span class="n">zeros_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">lambdas</span><span class="p">),</span> <span class="n">k</span><span class="p">))</span>
+    <span class="n">iters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">lambdas</span><span class="p">),</span> <span class="n">k</span><span class="p">))</span>
+
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">mu</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">inv_logit_mat</span><span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">theta</span><span class="p">))</span>
+    <span class="n">Xcross</span> <span class="o">=</span> <span class="n">X</span> <span class="o">-</span> <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Xcross</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+        <span class="n">last_A</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">last_B</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">mu</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">inv_logit_mat</span><span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">theta</span><span class="p">))</span>
+        <span class="n">Xm</span> <span class="o">=</span> <span class="n">X</span> <span class="o">-</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">mu</span><span class="p">)</span> <span class="o">+</span> <span class="n">A</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">!=</span> <span class="n">m</span><span class="p">]</span> <span class="o">@</span> <span class="n">B</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">!=</span> <span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+        <span class="n">Bms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">d</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">lambdas</span><span class="p">)))</span>
+        <span class="n">Ams</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">lambdas</span><span class="p">)))</span>
+
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">lambda_val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lambdas</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iters</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">B</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">A</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">Xm</span> <span class="o">@</span> <span class="n">B</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span>
+                    <span class="k">break</span>
+
+                <span class="n">A</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">Xm</span> <span class="o">@</span> <span class="n">B</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">B</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">A</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">A</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+                <span class="n">B_lse</span> <span class="o">=</span> <span class="n">Xm</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">A</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span>
+                <span class="n">B</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">B_lse</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">B_lse</span><span class="p">)</span> <span class="o">-</span> <span class="n">lambda_val</span><span class="p">)</span>
+
+                <span class="n">loglike</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">inv_logit_mat</span><span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">mu</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">))))[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">dat</span><span class="p">)])</span>
+                <span class="n">penalty</span> <span class="o">=</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">lambda_val</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">B</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]))</span>
+                <span class="n">cur_loss</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">loglike</span> <span class="o">+</span> <span class="n">penalty</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">dat</span><span class="p">))</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s2">&quot;  &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="o">-</span><span class="n">loglike</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="s2">&quot;   &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">penalty</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+                          <span class="s2">&quot;     &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="o">-</span><span class="n">loglike</span> <span class="o">+</span> <span class="n">penalty</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">last_loss</span> <span class="o">-</span> <span class="n">cur_loss</span><span class="p">)</span> <span class="o">/</span> <span class="n">last_loss</span> <span class="o">&lt;</span> <span class="n">conv_crit</span><span class="p">:</span>
+                        <span class="k">break</span>
+
+                <span class="n">last_loss</span> <span class="o">=</span> <span class="n">cur_loss</span>
+
+            <span class="n">Bms</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">B</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">B</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">B</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
+            <span class="n">Ams</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Xm</span> <span class="o">@</span> <span class="n">Bms</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Bms</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Bms</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+            <span class="c1">#BICs[j, m] = -2 * loglike + np.log(n * d) * (np.sum(np.abs(B) &gt;= 1e-10))</span>
+            <span class="n">BICs</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">loglike</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">B</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]))</span>
+
+
+            <span class="c1">#zeros_mat[j, m] = np.sum(np.abs(B[:, m]) &lt; 1e-10)</span>
+            <span class="n">zeros_mat</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">B</span><span class="p">[:,</span> <span class="n">m</span><span class="p">])</span>
+
+            <span class="n">iters</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="n">B</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">Bms</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">BICs</span><span class="p">[:,</span> <span class="n">m</span><span class="p">])]</span>
+        <span class="n">A</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ams</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">BICs</span><span class="p">[:,</span> <span class="n">m</span><span class="p">])]</span>
+
+    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+        <span class="c1">#A = A / np.sqrt(np.sum(B**2, axis=0))</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">A</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">A</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">B</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">B</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+
+    <span class="k">return</span> <span class="n">mu</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">zeros_mat</span><span class="p">,</span> <span class="n">BICs</span></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Andy Zhang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

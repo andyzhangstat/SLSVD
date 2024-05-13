@@ -1,0 +1,34 @@
+:py:mod:`slsvd.metrics`
+=======================
+
+.. py:module:: slsvd.metrics
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   slsvd.metrics.mse
+   slsvd.metrics.principle_angle
+   slsvd.metrics.true_positive_rate
+   slsvd.metrics.false_positive_rate
+
+
+
+.. py:function:: mse(X, Y)
+
+
+.. py:function:: principle_angle(X, B)
+
+
+.. py:function:: true_positive_rate(X, B)
+
+
+.. py:function:: false_positive_rate(X, B)
+
+

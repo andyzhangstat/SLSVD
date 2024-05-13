@@ -1,0 +1,113 @@
+:py:mod:`slsvd.slsvd`
+=====================
+
+.. py:module:: slsvd.slsvd
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   slsvd.slsvd.inv_logit_mat
+   slsvd.slsvd.sparse_logistic_svd
+   slsvd.slsvd.sparse_logistic_svd_coord
+
+
+
+.. py:function:: inv_logit_mat(x, min_val=0, max_val=1)
+
+   Inverse logit transformation.
+
+   Parameters:
+   x : ndarray
+       Input array.
+   min_val : float, optional
+       Minimum value for the output range.
+   max_val : float, optional
+       Maximum value for the output range.
+
+   Returns:
+   ndarray
+       Inverse logit transformed array.
+
+
+.. py:function:: sparse_logistic_svd(dat, lambda_val=0, k=2, quiet=True, max_iters=100, conv_crit=1e-05, randstart=False, procrustes=True, lasso=True, normalize=False, start_A=None, start_B=None, start_mu=None)
+
+   Sparse Logistic PCA.
+
+   Parameters:
+   dat : ndarray
+       Input data matrix.
+   lambda_val : float, optional
+       Regularization parameter.
+   k : int, optional
+       Number of components.
+   quiet : bool, optional
+       If True, suppresses iteration printouts.
+   max_iters : int, optional
+       Maximum number of iterations.
+   conv_crit : float, optional
+       Convergence criterion.
+   randstart : bool, optional
+       If True, uses random initialization.
+   procrustes : bool, optional
+       If True, uses procrustes transformation.
+   lasso : bool, optional
+       If True, applies lasso regularization.
+   normalize : bool, optional
+       If True, normalizes the components.
+   start_A : ndarray, optional
+       Initial value for matrix A.
+   start_B : ndarray, optional
+       Initial value for matrix B.
+   start_mu : ndarray, optional
+       Initial value for mean vector.
+
+   Returns:
+   tuple
+       Tuple containing mu, A, B, zeros, BIC, m, lambda_val.
+
+
+.. py:function:: sparse_logistic_svd_coord(dat, lambdas=np.logspace(-2, 2, num=10), k=2, quiet=True, max_iters=100, conv_crit=1e-05, randstart=False, normalize=False, start_A=None, start_B=None, start_mu=None)
+
+   Sparse Logistic SVD with Coordinate Descent.
+
+   Parameters:
+   dat : ndarray
+       Input data matrix.
+   lambdas : array_like, optional
+       Array of regularization parameters.
+   k : int, optional
+       Number of components.
+   quiet : bool, optional
+       If True, suppresses iteration printouts.
+   max_iters : int, optional
+       Maximum number of iterations.
+   conv_crit : float, optional
+       Convergence criterion.
+   randstart : bool, optional
+       If True, uses random initialization.
+   normalize : bool, optional
+       If True, normalizes the components.
+   start_A : ndarray, optional
+       Initial value for matrix A.
+   start_B : ndarray, optional
+       Initial value for matrix B.
+   start_mu : ndarray, optional
+       Initial value for mean vector.
+
+   Returns:
+   tuple
+       Tuple containing mu, A, B, zeros_mat, BICs.
+       - mu: The mean vector.
+       - A: The matrix A.
+       - B: The matrix B.
+       - zeros_mat: Matrix indicating the number of zeros in each component.
+       - BICs: Matrix containing the Bayesian Information Criterion for each component.
+
+

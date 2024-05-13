@@ -1,0 +1,41 @@
+:py:mod:`slsvd.data_generation`
+===============================
+
+.. py:module:: slsvd.data_generation
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   slsvd.data_generation.generate_data
+
+
+
+.. py:function:: generate_data(n, d, rank, random_seed=123)
+
+   Generate binary data matrix.
+
+   :param n: The number of data points.
+   :type n: integer
+   :param d: The number of features.
+   :type d: integer
+   :param rank: The number of rank.
+   :type rank: integer
+   :param random_seed: Random seed to ensure reproducibility.
+   :type random_seed: integer
+
+   :returns: **X** -- Binary data matrix of shape (n, d).
+   :rtype: ndarray
+
+   .. rubric:: Examples
+
+   >>> from slsvd.data_generation import generate_data
+   >>> generate_data_lr(n=50, d=100, rank=2, random_seed=123)
+
+
