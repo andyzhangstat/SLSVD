@@ -2,7 +2,7 @@
 
 Sparse Logistic Singular Value Decomposition (SLSVD) for Binary Matrix Data
 
-<!-- ![CI/CD](https://github.com/UBC-MDS/lr_cd/actions/workflows/ci-cd.yml/badge.svg)
+![CI/CD](https://github.com/UBC-MDS/lr_cd/actions/workflows/ci-cd.yml/badge.svg)
 [![codecov](https://codecov.io/gh/UBC-MDS/lr_cd/branch/main/graph/badge.svg)](https://codecov.io/gh/UBC-MDS/lr_cd)
 [![Documentation Status](https://readthedocs.org/projects/lr-cd/badge/?version=latest)](https://lr-cd.readthedocs.io/en/latest/?badge=latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -10,7 +10,7 @@ Sparse Logistic Singular Value Decomposition (SLSVD) for Binary Matrix Data
 [![Python 3.9.0](https://img.shields.io/badge/python-3.9.0-blue.svg)](https://www.python.org/downloads/release/python-390/)
 ![release](https://img.shields.io/github/release-date/UBC-MDS/lr_cd)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
- -->
+
 
 
 ## Project Summary
@@ -38,9 +38,9 @@ There are two major functions in this package:
 
 ## Common Parameters
 - `n` (integer): Number of data points.
-- `n_features` (integer): Number of features.
+- `d` (integer): Number of features.
+- `rank`: Number of components.
 - `random_seed` (integer): Random seed to ensure reproducibility.
-- `X` (ndarray): Feature data matrix.
 - `dat`: Input data matrix.
 - `lambdas`: Array of regularization parameters.
 - `k`: Number of components.
@@ -177,7 +177,7 @@ array([[1., 0.],
 ```
 
 
-<img src="https://github.com/andyzhangstat/SLSVD/blob/main/img/heatmap.png" height="200">
+<img src="https://github.com/andyzhangstat/SLSVD/blob/main/img/heatmap.png" width="1280" height="850">
 
 
 
@@ -191,11 +191,11 @@ array([[1., 0.],
 >>> # Calculate mean of mu
 >>> print("Mean of mu:", np.mean(mu))
 
->>> # Calculate dot product of A
->>> print("Dot Product of A:\n", np.dot(A.T, A))
+>>> # Calculate dot product of Scores
+>>> print("Dot Product of Scores:\n", np.dot(A.T, A))
 
->>> # Calculate dot product of B
->>> print("Dot Product of B:\n", np.dot(B.T, B))
+>>> # Calculate dot product of Loadings
+>>> print("Dot Product of Loadings:\n", np.dot(B.T, B))
 
 ```
 
@@ -204,11 +204,11 @@ array([[1., 0.],
 ```
 Mean of mu: 0.052624279581212116
 
-Dot Product of A:
+Dot Product of Scores:
 array([[7672.61634966,  277.23466856],
        [ 277.23466856, 3986.24113586]])
 
-Dot Product of B:
+Dot Product of Loadings:
 array([[1.        , 0.00111067],
        [0.00111067, 1.        ]])
 
@@ -219,10 +219,10 @@ array([[1.        , 0.00111067],
 
 ## Documentations
 
-<!-- 
-Online documentation is available [readthedocs](https://lr-cd.readthedocs.io/en/latest/?badge=latest).
 
-Publishing on [TestPyPi](https://test.pypi.org/project/lr-cd/) and [PyPi](https://pypi.org/project/lr-cd/). -->
+Online documentation is available [readthedocs](https://slsvd.readthedocs.io/en/latest/?badge=latest).
+
+Publishing on [TestPyPi](https://test.pypi.org/project/slsvd/) and [PyPi](https://pypi.org/project/slsvd/). 
 
 ## Contributors
 
