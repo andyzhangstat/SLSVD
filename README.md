@@ -240,3 +240,12 @@ Interested in contributing? Check out the contributing guidelines. Please note t
 ## Credits
 
 `SLSVD` was created with [`cookiecutter`](https://cookiecutter.readthedocs.io/en/latest/) and the `py-pkgs-cookiecutter` [template](https://github.com/py-pkgs/py-pkgs-cookiecutter).
+
+## References
+
+- [Lee, S., Huang, J. Z., & Hu, J. (2010). Sparse logistic principal components analysis for binary data. The Annals of Applied Statistics, 4(3), 1579.](https://projecteuclid.org/journals/annals-of-applied-statistics/volume-4/issue-3/Sparse-logistic-principal-components-analysis-for-binary-data/10.1214/10-AOAS327.full)
+
+
+- [Lee, S., & Huang, J. Z. (2013). A coordinate descent MM algorithm for fast computation of sparse logistic PCA. Computational Statistics & Data Analysis, 62, 26-38.](https://www.sciencedirect.com/science/article/abs/pii/S0167947313000029)
+
+
