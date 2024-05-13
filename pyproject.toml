@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "slsvd"
 version = "0.1.1"
-description = "A package for doing great things!"
+description = "Python package for sparse logistic singular value decomposition."
 authors = ["Andy Zhang"]
 license = "MIT"
 readme = "README.md"
