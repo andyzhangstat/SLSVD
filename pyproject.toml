@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "slsvd"
-version = "0.1.0"
+version = "0.1.1"
 description = "A package for doing great things!"
 authors = ["Andy Zhang"]
 license = "MIT"
@@ -10,6 +10,13 @@ readme = "README.md"
 python = "^3.9"
 
 [tool.poetry.dev-dependencies]
+
+[tool.poetry.group.dev.dependencies]
+myst-nb = {version = "^1.1.0", python = "^3.9"}
+sphinx-autoapi = "^3.0.0"
+sphinx-rtd-theme = "^2.0.0"
+python-semantic-release = "^9.7.2"
+
 [tool.semantic_release]
 version_variable = "pyproject.toml:version" # version location
 branch = "main"                             # branch to make releases of
