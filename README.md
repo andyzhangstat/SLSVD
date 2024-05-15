@@ -177,7 +177,7 @@ array([[1., 0.],
 ```
 
 
-<img src="https://github.com/andyzhangstat/SLSVD/blob/main/img/heatmap.png" width="1280" height="850">
+<img src="https://github.com/andyzhangstat/SLSVD/blob/main/img/heatmap.png" width="900" height="600">
 
 
 
