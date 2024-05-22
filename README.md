@@ -161,17 +161,17 @@ array([[1., 0.],
 
 
 ```python
->>> plt.figure(figsize=(8, 12))
->>> cmap = plt.cm.get_cmap('viridis', 2)
-
+>>> plt.figure(figsize=(6, 9)) 
+>>> colors = ['cyan', 'magenta']
+>>> cmap = plt.matplotlib.colors.ListedColormap(colors, name='custom_cmap', N=2)
 >>> plt.imshow(bin_mat, cmap=cmap, interpolation='nearest')
-
 >>> cbar = plt.colorbar(ticks=[0.25, 0.75])
 >>> cbar.ax.set_yticklabels(['0', '1'])
-
->>> plt.title('Heatmap of Binary Matrix')
+>>> plt.title('Heatmap of Simulated Binary Matrix')
 >>> plt.xlabel('Feature')
 >>> plt.ylabel('Sample')
+
+>>> plt.tight_layout()
 
 >>> plt.show()
 ```
