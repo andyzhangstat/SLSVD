@@ -24,7 +24,7 @@ def generate_data(n, d, rank, random_seed=123):
     Examples
     --------
     >>> from slsvd.data_generation import generate_data
-    >>> generate_data_lr(n=50, d=100, rank=2, random_seed=123)
+    >>> generate_data(n=50, d=100, rank=2, random_seed=123)
     """
     
     if not isinstance(n, int):
