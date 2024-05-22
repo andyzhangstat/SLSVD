@@ -2,8 +2,8 @@
 
 Sparse Logistic Singular Value Decomposition (SLSVD) for Binary Matrix Data
 
-![CI/CD](https://github.com/andyzhangstat/SLSVD/actions/workflows/ci-cd.yml/badge.svg)
-[![codecov](https://codecov.io/gh/andyzhangstat/SLSVD/branch/main/graph/badge.svg)](https://codecov.io/gh/andyzhangstat/SLSVD)
+<!-- ![CI/CD](https://github.com/andyzhangstat/SLSVD/actions/workflows/ci-cd.yml/badge.svg)
+[![codecov](https://codecov.io/gh/andyzhangstat/SLSVD/branch/main/graph/badge.svg)](https://codecov.io/gh/andyzhangstat/SLSVD) -->
 [![Documentation Status](https://readthedocs.org/projects/slsvd/badge/?version=latest)](https://slsvd.readthedocs.io/en/latest/?badge=latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![version](https://img.shields.io/github/v/release/andyzhangstat/SLSVD)
@@ -177,7 +177,7 @@ array([[1., 0.],
 ```
 
 
-<img src="https://github.com/andyzhangstat/SLSVD/blob/main/img/heatmap.png" width="300" height="450">
+<img src="https://github.com/andyzhangstat/SLSVD/blob/main/img/heatmap.png?raw=true" width="300" height="450">
 
 
 
