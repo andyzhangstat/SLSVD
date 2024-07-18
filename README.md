@@ -1,6 +1,6 @@
 # SLSVD
 
-Sparse Logistic Singular Value Decomposition (SLSVD) for Binary Matrix Data <img src="https://github.com/andyzhangstat/SLSVD/blob/main/img/logo.png?raw=true" align="right" height="139">
+Sparse Logistic Singular Value Decomposition (SLSVD) for Binary Matrix Data <img src="https://github.com/andyzhangstat/SLSVD/blob/main/img/logo.png?raw=true" align="right" height="100">
 
 
 <!-- ![CI/CD](https://github.com/andyzhangstat/SLSVD/actions/workflows/ci-cd.yml/badge.svg)
